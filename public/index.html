@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Help Desk Online</title>
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#6c778a;--line:#e4e9f1;--p:#315bea;--g:#16a673;--r:#d94855;--o:#d99419}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font:14px Segoe UI,Arial;color:var(--text)}
+header{background:linear-gradient(135deg,#111d49,#315bea);color:white;padding:22px 5%;display:flex;justify-content:space-between;align-items:center}
+.logo{display:flex;gap:12px;align-items:center}.icon{font-size:25px}.logo b{font-size:19px}.online{display:flex;gap:8px;align-items:center;font-size:12px}.dot{width:9px;height:9px;background:#63f1ad;border-radius:50%}
+main{max-width:1400px;margin:auto;padding:25px 5%}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:15px}.card,.panel{background:white;border:1px solid var(--line);border-radius:18px;box-shadow:0 10px 30px #1720330d}.card{padding:17px}.card small{color:var(--muted)}.card strong{display:block;font-size:28px;margin:6px 0}
+.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:18px}.panel{padding:19px}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.head h2{font-size:17px;margin:0}.muted{font-size:12px;color:var(--muted)}
+.queue{display:grid;gap:10px}.ticket{display:grid;grid-template-columns:45px 1fr auto;gap:12px;border:1px solid var(--line);border-radius:14px;padding:13px}.rank{background:#edf1ff;color:var(--p);border-radius:11px;display:grid;place-items:center;font-weight:800;height:40px}.ticket h3{margin:0 0 4px;font-size:14px}.ticket p{margin:0;color:var(--muted);font-size:12px}.tags{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}.tag{font-size:11px;padding:5px 8px;border-radius:99px;background:#f0f3f7}.high{color:var(--r);background:#fff0f1}.medium{color:#a56d00;background:#fff6df}.low{color:#087e59;background:#eaf9f3}.timer{font-weight:800;color:var(--g);white-space:nowrap}.late{color:var(--r)}
+form{display:grid;gap:10px}label{font-weight:700;font-size:12px;color:#4d596d}input,select,textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;background:#fbfcfe;outline:none}textarea{min-height:90px;resize:vertical}.btn{border:0;border-radius:9px;padding:9px 11px;font-weight:700;font-size:12px;background:#edf1ff;color:#2747b9}.primary{background:var(--p);color:white;padding:12px}.green{background:#e8faf3;color:#087b57}.red{background:#fff0f1;color:#b72e3a}.gray{background:#eff2f5;color:#566175}
+.lookup{display:grid;grid-template-columns:1fr auto;gap:7px}.address{font-size:11px;color:var(--muted);min-height:16px}.table{width:100%;border-collapse:collapse;font-size:12px}.table th,.table td{padding:11px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}.table th{color:var(--muted)}.table-wrap{overflow:auto;margin-top:18px}.empty{text-align:center;padding:30px;color:var(--muted)}
+.toast{position:fixed;right:20px;bottom:20px;background:#172033;color:#fff;padding:12px 16px;border-radius:11px;opacity:0;transform:translateY(10px);transition:.2s}.toast.show{opacity:1;transform:none}
+@media(max-width:1100px){.stats{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr}}@media(max-width:650px){.stats{grid-template-columns:1fr 1fr}.ticket{grid-template-columns:40px 1fr}.ticket>div:last-child{grid-column:2}header{padding:18px}.online{display:none}}
+</style></head>
+<body>
+<header><div class="logo"><div class="icon">◈</div><div><b>Help Desk Online</b><br><small>Central de atendimento</small></div></div><div class="online"><span class="dot"></span><span id="apiStatus">Verificando API...</span></div></header>
+<main>
+<section class="stats">
+<div class="card"><small>Na fila</small><strong id="q">0</strong><small>aguardando</small></div>
+<div class="card"><small>Maior espera</small><strong id="wait">0 min</strong><small>limite: 15 min</small></div>
+<div class="card"><small>Em atendimento</small><strong id="active">0</strong><small>agentes</small></div>
+<div class="card"><small>SLA</small><strong id="sla">100%</strong><small>até 15 min</small></div>
+<div class="card"><small>Servidor</small><strong id="server">—</strong><small>API + PostgreSQL</small></div>
+</section>
+
+<div class="grid">
+<section class="panel"><div class="head"><div><h2>Fila de espera</h2><span class="muted">Atualização automática</span></div><button class="btn gray" onclick="load()">↻ Atualizar</button></div><div id="queue" class="queue"></div></section>
+
+<section class="panel">
+<div class="head"><div><h2>Novo chamado</h2><span class="muted">API REST + banco online</span></div></div>
+<form id="form">
+<label>Solicitante<input name="requester" required placeholder="Nome"></label>
+<label>Departamento<input name="department" placeholder="Financeiro, TI..."></label>
+<label>CEP <div class="lookup"><input id="cep" maxlength="9" placeholder="00000-000"><button type="button" class="btn" onclick="cepLookup()">Consultar</button></div></label>
+<div id="address" class="address"></div>
+<label>Categoria<select name="category"><option>Hardware</option><option>Software</option><option>Acesso</option><option>Rede</option><option>SAP</option><option>Outros</option></select></label>
+<label>Prioridade<select name="priority"><option>Média</option><option>Baixa</option><option>Alta</option><option>Crítica</option></select></label>
+<label>Assunto<input name="subject" required placeholder="Problema encontrado"></label>
+<label>Descrição<textarea name="description" required placeholder="Descreva o problema..."></textarea></label>
+<button class="btn primary">+ Abrir chamado</button>
+</form>
+</section></div>
+
+<section class="panel table-wrap"><div class="head"><h2>Todos os chamados</h2></div>
+<table class="table"><thead><tr><th>Protocolo</th><th>Solicitante</th><th>Assunto</th><th>Prioridade</th><th>Status</th><th>Espera</th><th>Ações</th></tr></thead><tbody id="all"></tbody></table>
+</section>
+</main><div id="toast" class="toast"></div>
+<script>
+const $=x=>document.getElementById(x), esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+function toast(x){$("toast").textContent=x;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2300)}
+function pc(p){return p==="Alta"||p==="Crítica"?"high":p==="Média"?"medium":"low"}
+function wt(n){return n<1?"agora":n+" min"}
+async function health(){try{let r=await fetch("/api/health");let d=await r.json();$("apiStatus").textContent=d.online?"API + PostgreSQL online":"API com erro";$("server").textContent=d.online?"ONLINE":"ERRO"}catch{$("apiStatus").textContent="API offline";$("server").textContent="OFFLINE"}}
+async function load(){
+ try{let r=await fetch("/api/tickets");let d=await r.json();render(d)}catch{toast("Não foi possível conectar à API.")}
+}
+function render(d){
+ $("q").textContent=d.queue.length;
+ let max=d.queue.length?Math.max(...d.queue.map(x=>x.waitMinutes)):0;
+ $("wait").textContent=max+" min";$("wait").className=max>15?"late":"";
+ $("active").textContent=d.tickets.filter(x=>x.status==="Em atendimento").length;
+ let sla=d.queue.length?Math.round(d.queue.filter(x=>x.waitMinutes<=15).length/d.queue.length*100):100;
+ $("sla").textContent=sla+"%";$("sla").className=sla<100?"late":"";
+ $("queue").innerHTML=d.queue.length?d.queue.map((t,i)=>`<article class="ticket"><div class="rank">#${i+1}</div><div><h3>${esc(t.subject)}</h3><p>${esc(t.id)} · ${esc(t.requester)} · ${esc(t.department)}</p><div class="tags"><span class="tag ${pc(t.priority)}">${esc(t.priority)}</span><span class="tag">${esc(t.category)}</span></div></div><div><div class="timer ${t.waitMinutes>15?"late":""}">⏱ ${wt(t.waitMinutes)}</div><button class="btn green" onclick="update('${t.id}','Em atendimento')">Atender</button></div></article>`).join(""):`<div class="empty">A fila está vazia.</div>`;
+ $("all").innerHTML=d.tickets.map(t=>`<tr><td><b>${esc(t.id)}</b></td><td>${esc(t.requester)}</td><td>${esc(t.subject)}</td><td><span class="tag ${pc(t.priority)}">${esc(t.priority)}</span></td><td>${esc(t.status)}</td><td>${wt(t.waitMinutes)}</td><td>${t.status==="Em atendimento"?`<button class="btn gray" onclick="update('${t.id}','Resolvido')">Finalizar</button>`:`<button class="btn green" onclick="update('${t.id}','Em atendimento')">Atender</button>`} <button class="btn red" onclick="removeT('${t.id}')">Excluir</button></td></tr>`).join("");
+}
+async function update(id,status){await fetch("/api/tickets/"+id,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({status,assigned_to:status==="Em atendimento"?"Agente 01":null})});toast(status==="Resolvido"?"Chamado finalizado.":"Chamado em atendimento.");load()}
+async function removeT(id){if(!confirm("Excluir chamado?"))return;await fetch("/api/tickets/"+id,{method:"DELETE"});toast("Chamado excluído.");load()}
+$("form").onsubmit=async e=>{e.preventDefault();let data=Object.fromEntries(new FormData(e.target));let r=await fetch("/api/tickets",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});if(r.ok){let t=await r.json();e.target.reset();toast("Chamado "+t.id+" criado.");load()}else toast("Erro ao criar chamado.")};
+async function cepLookup(){let cep=$("cep").value.replace(/\D/g,"");if(cep.length!==8)return toast("Digite um CEP válido.");let r=await fetch("/api/cep/"+cep);let d=await r.json();$("address").textContent=r.ok?`${d.logradouro||""}, ${d.bairro||""} — ${d.localidade||""}/${d.uf||""}`:d.error}
+health();load();setInterval(load,15000);setInterval(health,30000);
+</script></body></html>
