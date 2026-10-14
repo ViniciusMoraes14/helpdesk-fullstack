@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Help Desk Online</title>
+<style>
+
+:root{
+  color-scheme:dark;
+  --bg:#07131a;
+  --bg-soft:#0b1b22;
+  --card:#102129;
+  --card-2:#152b32;
+  --text:#effcf7;
+  --muted:#91aaa3;
+  --line:#243c3b;
+  --p:#10b981;
+  --p-hover:#059669;
+  --g:#34d399;
+  --r:#ff657a;
+  --o:#ffc66d;
+  --shadow:0 18px 48px rgba(0,0,0,.24);
+}
+*{box-sizing:border-box}
+html{min-height:100%;background:var(--bg)}
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(ellipse at 15% -10%,rgba(16,185,129,.13),transparent 38%),
+    radial-gradient(ellipse at 100% 0%,rgba(52,211,153,.07),transparent 30%),
+    var(--bg);
+  font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  color:var(--text);
+}
+header{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(115deg,#0b1b22 0%,#10352d 65%,#064e3b 100%);
+  border-bottom:1px solid rgba(52,211,153,.22);
+  color:#fff;padding:20px 5%;
+  display:flex;justify-content:space-between;align-items:center;
+  box-shadow:0 10px 34px rgba(0,0,0,.18)
+}
+header:after{
+  content:"";position:absolute;inset:auto -10% -65px 35%;height:120px;
+  background:radial-gradient(ellipse,rgba(16,185,129,.2),transparent 68%);
+  pointer-events:none
+}
+.logo{display:flex;gap:12px;align-items:center;position:relative;z-index:1}
+.icon{
+  font-size:25px;color:#8bb0ff;
+  width:42px;height:42px;border-radius:13px;display:grid;place-items:center;
+  background:rgba(112,151,255,.13);border:1px solid rgba(142,172,255,.26);
+  box-shadow:inset 0 0 18px rgba(83,124,255,.08)
+}
+.logo b{font-size:18px;letter-spacing:-.35px}
+.logo small{color:#b8c8ed;font-size:11px}
+.online{
+  display:flex;gap:9px;align-items:center;font-size:12px;
+  position:relative;z-index:1;color:#d9e5ff;
+  background:rgba(5,13,30,.25);border:1px solid rgba(165,190,255,.17);
+  padding:9px 12px;border-radius:999px
+}
+.dot{width:8px;height:8px;background:#48e4ad;border-radius:50%;box-shadow:0 0 0 4px rgba(72,228,173,.11),0 0 13px rgba(72,228,173,.65)}
+main{max-width:1400px;margin:auto;padding:28px 5% 40px}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.card,.panel{
+  background:linear-gradient(145deg,rgba(16,33,41,.98),rgba(11,27,34,.98));
+  border:1px solid var(--line);border-radius:17px;
+  box-shadow:var(--shadow)
+}
+.card{
+  position:relative;overflow:hidden;padding:18px 19px;
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease
+}
+.card:before{
+  content:"";position:absolute;top:0;left:18px;right:18px;height:2px;
+  border-radius:0 0 3px 3px;background:linear-gradient(90deg,rgba(16,185,129,.85),rgba(52,211,153,.08))
+}
+.card:hover{transform:translateY(-2px);border-color:#276052;box-shadow:0 22px 50px rgba(0,0,0,.28)}
+.card small{color:var(--muted);font-size:11px;letter-spacing:.15px}
+.card strong{display:block;font-size:28px;line-height:1.2;letter-spacing:-.8px;margin:9px 0 7px;color:#f5f8ff}
+#server{font-size:23px;color:var(--g)}
+#sla{color:var(--g)}
+.grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(340px,.8fr);gap:18px;margin-top:18px;align-items:stretch}
+.panel{padding:20px;min-width:0}
+.head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+.head h2{font-size:16px;letter-spacing:-.25px;margin:0;color:#f3f6ff}
+.muted{font-size:11px;color:var(--muted);display:inline-block;margin-top:3px}
+.queue{display:grid;gap:10px}
+.ticket{
+  display:grid;grid-template-columns:43px minmax(0,1fr) auto;gap:12px;align-items:start;
+  border:1px solid var(--line);border-radius:13px;padding:13px;
+  background:rgba(5,18,22,.48);transition:border-color .18s ease,background .18s ease
+}
+.ticket:hover{border-color:#276052;background:rgba(16,53,45,.35)}
+.rank{
+  background:linear-gradient(145deg,rgba(16,185,129,.2),rgba(16,185,129,.08));
+  border:1px solid rgba(52,211,153,.22);color:#6ee7b7;border-radius:11px;
+  display:grid;place-items:center;font-weight:800;height:40px
+}
+.ticket h3{margin:0 0 4px;font-size:13px;color:#e9efff;overflow-wrap:anywhere}
+.ticket p{margin:0;color:var(--muted);font-size:11px;overflow-wrap:anywhere}
+.tags{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
+.tag{font-size:10px;font-weight:650;letter-spacing:.1px;padding:5px 8px;border-radius:7px;background:#202c41;color:#b6c3dc;border:1px solid rgba(142,157,184,.1)}
+.high{color:#ff8d9c;background:rgba(255,101,122,.12);border-color:rgba(255,101,122,.18)}
+.medium{color:#ffd083;background:rgba(255,198,109,.11);border-color:rgba(255,198,109,.16)}
+.low{color:#68e8bf;background:rgba(56,217,169,.1);border-color:rgba(56,217,169,.15)}
+.timer{font-weight:750;color:var(--g);white-space:nowrap;font-size:11px;margin:2px 0 9px}
+.late{color:var(--r)!important}
+form{display:grid;gap:11px}
+label{display:block;font-weight:650;font-size:11px;color:#bdc9df}
+input,select,textarea{
+  display:block;width:100%;margin-top:6px;padding:11px 12px;
+  border:1px solid #2a3852;border-radius:9px;background:#0b1322;
+  color:var(--text);font:inherit;font-size:12px;outline:none;
+  transition:border-color .18s ease,box-shadow .18s ease,background .18s ease
+}
+input::placeholder,textarea::placeholder{color:#657591}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--p);background:#0e211f;box-shadow:0 0 0 3px rgba(16,185,129,.14)
+}
+select{color-scheme:dark}
+textarea{min-height:92px;resize:vertical}
+.btn{
+  cursor:pointer;border:1px solid transparent;border-radius:9px;padding:9px 11px;
+  font-weight:700;font-family:inherit;font-size:11px;
+  background:#202d46;color:#c8d6f2;
+  transition:transform .16s ease,background .16s ease,border-color .16s ease,box-shadow .16s ease
+}
+.btn:hover{transform:translateY(-1px);background:#2a3a5a;border-color:#3a4f77}
+.btn:active{transform:translateY(0)}
+.primary{
+  background:linear-gradient(100deg,#059669,#10b981);color:#f0fdf4;padding:12px;
+  box-shadow:0 8px 20px rgba(16,185,129,.18)
+}
+.primary:hover{background:linear-gradient(100deg,#047857,#059669);box-shadow:0 10px 24px rgba(16,185,129,.25)}
+.green{background:rgba(16,185,129,.12);color:#6ee7b7;border-color:rgba(52,211,153,.2)}
+.green:hover{background:rgba(16,185,129,.2);border-color:rgba(52,211,153,.35)}
+.red{background:rgba(255,101,122,.1);color:#ff8c9b;border-color:rgba(255,101,122,.15)}
+.red:hover{background:rgba(255,101,122,.18);border-color:rgba(255,101,122,.3)}
+.gray{background:#1a263b;color:#c0cde4;border-color:#293852}
+.gray:hover{background:#25344e;border-color:#3b4e70}
+.lookup{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px}
+.lookup input{min-width:0}
+.lookup .btn{margin-top:6px}
+.address{font-size:11px;color:var(--muted);min-height:16px;margin-top:-4px}
+.table-wrap{margin-top:18px;overflow:hidden}
+.table{width:100%;border-collapse:collapse;font-size:11px}
+.table th,.table td{padding:13px 12px;border-bottom:1px solid #24314a;text-align:left;white-space:nowrap}
+.table th{color:#8e9db8;font-size:10px;text-transform:uppercase;letter-spacing:.65px;font-weight:700;background:rgba(8,14,26,.35)}
+.table td{color:#cdd7eb}
+.table td b{color:#eef3ff}
+.table tbody tr{transition:background .15s ease}
+.table tbody tr:hover{background:rgba(16,185,129,.055)}
+.table tbody tr:last-child td{border-bottom:0}
+.table td .btn{margin:2px 2px 2px 0}
+.empty{text-align:center;padding:42px 20px;color:#8191ad;border:1px dashed #2b3a55;border-radius:13px;background:rgba(8,14,26,.25)}
+.toast{
+  position:fixed;right:22px;bottom:22px;z-index:10;
+  background:#18243a;color:#f1f5ff;padding:13px 17px;border-radius:12px;
+  border:1px solid #344767;box-shadow:0 18px 45px rgba(0,0,0,.35);
+  opacity:0;transform:translateY(10px);transition:.22s;pointer-events:none
+}
+.toast.show{opacity:1;transform:none}
+@media(max-width:1100px){
+  .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .grid{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+  header{padding:16px 5%}
+  .logo b{font-size:16px}
+  .online{font-size:10px;padding:8px 10px}
+  main{padding:20px 4% 30px}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .card{padding:15px}
+  .card strong{font-size:24px}
+  .grid{gap:14px;margin-top:14px}
+  .panel{padding:15px;border-radius:14px}
+  .ticket{grid-template-columns:38px minmax(0,1fr);gap:10px}
+  .ticket>div:last-child{grid-column:2;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .timer{margin:0}
+  .table-wrap{margin-top:14px}
+}
+@media(max-width:420px){
+  .online{max-width:120px;font-size:9px}
+  .logo{gap:8px}
+  .icon{width:36px;height:36px;font-size:22px}
+  .stats{gap:8px}
+  .card small{font-size:10px}
+  .card strong{font-size:22px}
+  .head{align-items:flex-start}
+  .lookup{grid-template-columns:1fr}
+  .lookup .btn{margin-top:0}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important;scroll-behavior:auto!important}
+}
+
+
+/* Tela de autenticação */
+.login-screen{
+  position:fixed;inset:0;z-index:1000;display:grid;place-items:center;
+  padding:22px;background:
+    radial-gradient(ellipse at 20% 10%,rgba(16,185,129,.18),transparent 40%),
+    radial-gradient(ellipse at 90% 90%,rgba(52,211,153,.08),transparent 35%),#07131a;
+}
+.login-screen[hidden]{display:none}
+.login-card{
+  width:min(100%,420px);padding:32px;border:1px solid #245044;border-radius:22px;
+  background:linear-gradient(145deg,rgba(16,33,41,.99),rgba(8,24,29,.99));
+  box-shadow:0 28px 90px rgba(0,0,0,.5)
+}
+.login-brand{display:flex;align-items:center;gap:13px;margin-bottom:27px}
+.login-brand .icon{width:48px;height:48px;font-size:27px}
+.login-brand b{font-size:19px;letter-spacing:-.4px}
+.login-brand small{display:block;color:#8e9db8;font-size:12px;margin-top:2px}
+.login-kicker{color:#6ee7b7;text-transform:uppercase;font-weight:800;font-size:10px;letter-spacing:1.7px;margin:0 0 7px}
+.login-card h1{font-size:25px;letter-spacing:-.7px;margin:0 0 7px}
+.login-subtitle{color:#8e9db8;font-size:12px;margin:0 0 24px}
+.login-card form{gap:15px}
+.login-card label{font-size:12px}
+.login-card input{padding:13px 14px;font-size:13px}
+.login-error{min-height:17px;color:#ff8c9b;font-size:12px;margin:0}
+.login-footer{display:flex;align-items:center;justify-content:center;gap:8px;color:#71819e;font-size:10px;margin-top:20px}
+.login-footer .dot{width:6px;height:6px}
+.header-actions{display:flex;align-items:center;gap:10px;position:relative;z-index:1}
+.logout-btn{border:1px solid rgba(165,190,255,.2);background:rgba(5,13,30,.25);color:#d9e5ff;border-radius:999px;padding:9px 12px;font:inherit;font-size:11px;font-weight:700;cursor:pointer}
+.logout-btn:hover{background:rgba(112,151,255,.16);border-color:rgba(165,190,255,.4)}
+.admin-panel{margin:0 0 22px}.admin-panel[hidden]{display:none}.admin-panel form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.admin-panel .admin-actions{grid-column:1/-1;display:flex;align-items:center;gap:12px;flex-wrap:wrap}.admin-panel .muted{color:#8e9db8;font-size:12px}.user-list{margin-top:16px;color:#dce6fb;font-size:13px}.user-list li{padding:8px 0;border-bottom:1px solid rgba(165,190,255,.12)}.nav-btn{border:1px solid rgba(165,190,255,.2);background:rgba(5,13,30,.25);color:#d9e5ff;border-radius:999px;padding:9px 12px;font:inherit;font-size:11px;font-weight:700;cursor:pointer}.nav-btn[hidden]{display:none}
+@media(max-width:600px){.admin-panel form{grid-template-columns:1fr}}
+body.locked{overflow:hidden}
+@media(max-width:600px){
+  .login-card{padding:25px 21px;border-radius:18px}
+  .header-actions{gap:6px}
+  .logout-btn{padding:8px 9px;font-size:10px}
+}
+
+
+/* Layout profissional com navegação lateral */
+:root { --sidebar-width: 218px; }
+body:not(.locked) { padding-left: var(--sidebar-width); }
+.app-sidebar {
+  position: fixed; inset: 0 auto 0 0; width: var(--sidebar-width); z-index: 50;
+  display: flex; flex-direction: column; padding: 22px 14px 16px;
+  background: #06121a; border-right: 1px solid #203a39;
+}
+.app-brand { display:flex; align-items:center; gap:10px; padding:0 4px 26px; }
+.app-brand-mark { width:40px;height:40px;border-radius:12px;display:grid;place-items:center;
+  background:linear-gradient(145deg,#34d399,#059669);color:#052e22;font-weight:900;font-size:15px;
+  box-shadow:0 8px 22px rgba(16,185,129,.2); }
+.app-brand strong { display:block;font-size:15px;letter-spacing:-.3px;color:#f0fdf4; }
+.app-brand small { display:block;color:#91aaa3;font-size:11px;margin-top:2px; }
+.app-nav { display:grid;gap:5px; }
+.app-nav a,.app-nav button { width:100%;display:flex;align-items:center;gap:11px;padding:11px 12px;
+  border:1px solid transparent;border-radius:10px;background:transparent;color:#9bb0ae;text-decoration:none;
+  font:600 12px/1.4 inherit;text-align:left;cursor:pointer;transition:background .16s,color .16s,border-color .16s; }
+.app-nav a:hover,.app-nav button:hover { background:#102722;color:#eafff5; }
+.app-nav a.active { background:rgba(16,185,129,.15);border-color:rgba(52,211,153,.17);color:#6ee7b7; }
+.app-nav .nav-symbol { width:18px;text-align:center;font-size:15px; }
+.sidebar-bottom { margin-top:auto;display:grid;gap:16px;padding:14px 6px 0;color:#8da5a0;font-size:10px; }
+.sidebar-status { display:flex;align-items:center;gap:8px; }
+.sidebar-status .dot { width:7px;height:7px;box-shadow:0 0 0 3px rgba(52,211,153,.1); }
+.sidebar-bottom button { border:0;background:transparent;color:#9bb0ae;text-align:left;font:inherit;font-size:12px;cursor:pointer;padding:4px 0; }
+body:not(.locked) > header { margin:0; padding:18px 28px; background:rgba(8,24,29,.86);border-bottom:1px solid #203a39;box-shadow:none; }
+body:not(.locked) > header:after { display:none; }
+body:not(.locked) > header .logo { display:none; }
+body:not(.locked) > header .header-actions { margin-left:auto; }
+body:not(.locked) > main { max-width:none;margin:0;padding:26px 28px 38px; }
+body:not(.locked) > main:before { content:"SERVICE DESK / TI";display:block;color:#6ee7b7;font-size:10px;font-weight:800;letter-spacing:1.6px;margin-bottom:4px; }
+body:not(.locked) .stats { gap:14px; }
+body:not(.locked) .card, body:not(.locked) .panel { border-radius:14px; }
+body:not(.locked) .card { background:#102129; }
+body:not(.locked) .panel { background:linear-gradient(145deg,#102129,#0c1c24); }
+body:not(.locked) .head h2 { font-size:16px; }
+body:not(.locked) .primary { border-radius:9px; }
+#adminUsersPanel { scroll-margin-top:20px; }
+#queue { scroll-margin-top:20px; }
+#all { scroll-margin-top:20px; }
+@media(max-width:800px) {
+  :root { --sidebar-width: 70px; }
+  .app-sidebar { padding:18px 8px 14px; }
+  .app-brand { justify-content:center;padding:0 0 22px; }
+  .app-brand-copy,.app-nav .nav-label,.sidebar-status span:last-child,.sidebar-bottom .logout-label { display:none; }
+  .app-nav a,.app-nav button { justify-content:center;padding:12px 5px;font-size:0; }
+  .app-nav .nav-symbol { font-size:17px; }
+  .sidebar-bottom { justify-items:center;padding-left:0;padding-right:0; }
+  body:not(.locked) > main { padding:20px 16px 30px; }
+  body:not(.locked) > header { padding:15px 16px; }
+}
+@media(max-width:560px) {
+  :root { --sidebar-width: 58px; }
+  .app-brand-mark { width:36px;height:36px; }
+  body:not(.locked) .stats { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  body:not(.locked) > main { padding:16px 10px 24px; }
+  body:not(.locked) > header { padding:12px 10px; }
+}
+body.locked .app-sidebar { display:none; }
+
+</style></head>
+<body class="locked">
+
+<div id="loginScreen" class="login-screen">
+  <section class="login-card" aria-labelledby="loginTitle">
+    <div class="login-brand">
+      <div class="icon">◈</div>
+      <div><b>Help Desk Online</b><small>Central de atendimento</small></div>
+    </div>
+    <p class="login-kicker">Acesso seguro</p>
+    <h1 id="loginTitle">Bem-vindo de volta</h1>
+    <p class="login-subtitle">Entre com suas credenciais para acessar o painel.</p>
+    <form id="loginForm" autocomplete="on">
+      <label for="loginUsername">Usuário
+        <input id="loginUsername" name="username" autocomplete="username" required placeholder="Seu usuário">
+      </label>
+      <label for="loginPassword">Senha
+        <input id="loginPassword" name="password" type="password" autocomplete="current-password" required placeholder="Sua senha">
+      </label>
+      <p id="loginError" class="login-error" role="alert" aria-live="polite"></p>
+      <button id="loginButton" class="btn primary" type="submit">Entrar no sistema</button>
+    </form>
+    <div class="login-footer"><span class="dot"></span> Sessão protegida · Help Desk Online</div>
+  </section>
+</div>
+
+
+<aside class="app-sidebar" aria-label="Navegação principal">
+  <div class="app-brand"><div class="app-brand-mark">HD</div><div class="app-brand-copy"><strong>HelpDesk</strong><small>TI Pro · Service Desk</small></div></div>
+  <nav class="app-nav">
+    <a class="active" href="#dashboard" data-nav="dashboard"><span class="nav-symbol">⌂</span><span class="nav-label">Dashboard</span></a>
+    <a href="#allTickets" data-nav="tickets"><span class="nav-symbol">▣</span><span class="nav-label">Chamados</span></a>
+    <a href="#queuePanel" data-nav="queue"><span class="nav-symbol">⌛</span><span class="nav-label">Fila de chamados</span></a>
+    <a href="#newTicketForm" data-nav="new"><span class="nav-symbol">＋</span><span class="nav-label">Novo chamado</span></a>
+    <button id="sidebarUsersButton" type="button" hidden><span class="nav-symbol">♙</span><span class="nav-label">Usuários</span></button>
+    <a href="#knowledge" data-nav="knowledge"><span class="nav-symbol">◇</span><span class="nav-label">Conhecimento</span></a>
+  </nav>
+  <div class="sidebar-bottom"><div class="sidebar-status"><span class="dot"></span><span id="sidebarStatus">Sistema operacional</span></div><button id="sidebarLogoutButton" type="button"><span>↪</span> <span class="logout-label">Sair</span></button></div>
+</aside>
+
+<header><div class="logo"><div class="icon">◈</div><div><b>Help Desk Online</b><br><small>Central de atendimento</small></div></div><div class="header-actions"><div class="online"><span class="dot"></span><span id="apiStatus">Verificando API...</span></div><button id="usersButton" class="nav-btn" type="button" hidden>Usuários +</button><button id="logoutButton" class="logout-btn" type="button" hidden>Sair ↗</button></div></header>
+<main>
+<section id="adminUsersPanel" class="panel admin-panel" hidden>
+  <div class="head"><div><h2>Cadastro de usuários</h2><span class="muted">Somente o administrador pode criar contas.</span></div><button id="closeUsersButton" class="btn gray" type="button">Fechar</button></div>
+  <form id="createUserForm">
+    <label>Novo usuário<input name="username" required minlength="3" maxlength="40" pattern="[a-zA-Z0-9._-]+" autocomplete="off" placeholder="ex.: joao.silva"></label>
+    <label>Senha inicial<input name="password" type="password" required minlength="10" maxlength="128" autocomplete="new-password" placeholder="Mínimo de 10 caracteres"></label>
+    <div class="admin-actions"><button id="createUserButton" class="btn primary" type="submit">Cadastrar usuário</button><span class="muted">A senha será armazenada com hash seguro.</span></div>
+    <p id="createUserError" class="login-error" role="alert" aria-live="polite"></p>
+  </form>
+  <div><h3>Usuários cadastrados</h3><ul id="userList" class="user-list"></ul></div>
+</section>
+<section class="stats" id="dashboard">
+<div class="card"><small>Na fila</small><strong id="q">0</strong><small>aguardando</small></div>
+<div class="card"><small>Maior espera</small><strong id="wait">0 min</strong><small>limite: 15 min</small></div>
+<div class="card"><small>Em atendimento</small><strong id="active">0</strong><small>agentes</small></div>
+<div class="card"><small>SLA</small><strong id="sla">100%</strong><small>até 15 min</small></div>
+<div class="card"><small>Servidor</small><strong id="server">—</strong><small>API + PostgreSQL</small></div>
+</section>
+
+<div class="grid">
+<section class="panel" id="queuePanel"><div class="head"><div><h2>Fila de espera</h2><span class="muted">Atualização automática</span></div><button class="btn gray" onclick="load()">↻ Atualizar</button></div><div id="queue" class="queue"></div></section>
+
+<section class="panel">
+<div class="head"><div><h2>Novo chamado</h2><span class="muted">API REST + banco online</span></div></div>
+<form id="newTicketForm">
+<label>Solicitante<input name="requester" required placeholder="Nome"></label>
+<label>Departamento<input name="department" placeholder="Financeiro, TI..."></label>
+<label>CEP <div class="lookup"><input id="cep" maxlength="9" placeholder="00000-000"><button type="button" class="btn" onclick="cepLookup()">Consultar</button></div></label>
+<div id="address" class="address"></div>
+<label>Categoria<select name="category"><option>Hardware</option><option>Software</option><option>Acesso</option><option>Rede</option><option>SAP</option><option>Outros</option></select></label>
+<label>Prioridade<select name="priority"><option>Média</option><option>Baixa</option><option>Alta</option><option>Crítica</option></select></label>
+<label>Assunto<input name="subject" required placeholder="Problema encontrado"></label>
+<label>Descrição<textarea name="description" required placeholder="Descreva o problema..."></textarea></label>
+<button class="btn primary">+ Abrir chamado</button>
+</form>
+</section></div>
+
+<section class="panel table-wrap" id="allTickets"><div class="head"><h2>Todos os chamados</h2></div>
+<table class="table"><thead><tr><th>Protocolo</th><th>Solicitante</th><th>Assunto</th><th>Prioridade</th><th>Status</th><th>Espera</th><th>Ações</th></tr></thead><tbody id="all"></tbody></table>
+</section>
+</main><div id="toast" class="toast"></div>
+<script>
+const $=x=>document.getElementById(x), esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+function toast(x){$("toast").textContent=x;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2300)}
+function pc(p){return p==="Alta"||p==="Crítica"?"high":p==="Média"?"medium":"low"}
+function wt(n){return n<1?"agora":n+" min"}
+async function health(){try{let r=await fetch("/api/health");let d=await r.json();$("apiStatus").textContent=d.online?"API + PostgreSQL online":"API com erro";$("server").textContent=d.online?"ONLINE":"ERRO";$("sidebarStatus").textContent=d.online?"Sistema operacional":"API com erro"}catch{$("apiStatus").textContent="API offline";$("server").textContent="OFFLINE";$("sidebarStatus").textContent="API offline"}}
+async function load(){
+ try{let r=await fetch("/api/tickets");let d=await r.json();render(d)}catch{toast("Não foi possível conectar à API.")}
+}
+function render(d){
+ $("q").textContent=d.queue.length;
+ let max=d.queue.length?Math.max(...d.queue.map(x=>x.waitMinutes)):0;
+ $("wait").textContent=max+" min";$("wait").className=max>15?"late":"";
+ $("active").textContent=d.tickets.filter(x=>x.status==="Em atendimento").length;
+ let sla=d.queue.length?Math.round(d.queue.filter(x=>x.waitMinutes<=15).length/d.queue.length*100):100;
+ $("sla").textContent=sla+"%";$("sla").className=sla<100?"late":"";
+ $("queue").innerHTML=d.queue.length?d.queue.map((t,i)=>`<article class="ticket"><div class="rank">#${i+1}</div><div><h3>${esc(t.subject)}</h3><p>${esc(t.id)} · ${esc(t.requester)} · ${esc(t.department)}</p><div class="tags"><span class="tag ${pc(t.priority)}">${esc(t.priority)}</span><span class="tag">${esc(t.category)}</span></div></div><div><div class="timer ${t.waitMinutes>15?"late":""}">⏱ ${wt(t.waitMinutes)}</div><button class="btn green" onclick="update('${t.id}','Em atendimento')">Atender</button></div></article>`).join(""):`<div class="empty">A fila está vazia.</div>`;
+ $("all").innerHTML=d.tickets.map(t=>`<tr><td><b>${esc(t.id)}</b></td><td>${esc(t.requester)}</td><td>${esc(t.subject)}</td><td><span class="tag ${pc(t.priority)}">${esc(t.priority)}</span></td><td>${esc(t.status)}</td><td>${wt(t.waitMinutes)}</td><td>${t.status==="Em atendimento"?`<button class="btn gray" onclick="update('${t.id}','Resolvido')">Finalizar</button>`:`<button class="btn green" onclick="update('${t.id}','Em atendimento')">Atender</button>`} <button class="btn red" onclick="removeT('${t.id}')">Excluir</button></td></tr>`).join("");
+}
+async function update(id,status){await fetch("/api/tickets/"+id,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({status,assigned_to:status==="Em atendimento"?"Agente 01":null})});toast(status==="Resolvido"?"Chamado finalizado.":"Chamado em atendimento.");load()}
+async function removeT(id){if(!confirm("Excluir chamado?"))return;await fetch("/api/tickets/"+id,{method:"DELETE"});toast("Chamado excluído.");load()}
+$("newTicketForm").onsubmit=async e=>{e.preventDefault();let data=Object.fromEntries(new FormData(e.target));let r=await fetch("/api/tickets",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});if(r.ok){let t=await r.json();e.target.reset();toast("Chamado "+t.id+" criado.");load()}else toast("Erro ao criar chamado.")};
+async function cepLookup(){let cep=$("cep").value.replace(/\D/g,"");if(cep.length!==8)return toast("Digite um CEP válido.");let r=await fetch("/api/cep/"+cep);let d=await r.json();$("address").textContent=r.ok?`${d.logradouro||""}, ${d.bairro||""} — ${d.localidade||""}/${d.uf||""}`:d.error}
+
+let refreshTimer=null, healthTimer=null;
+function showDashboard(role="user"){
+  currentRole=role;
+  $("usersButton").hidden=role!=="admin";
+  $("sidebarUsersButton").hidden=role!=="admin";
+  $("adminUsersPanel").hidden=true;
+  $("loginScreen").hidden=true;
+  document.body.classList.remove("locked");
+  $("logoutButton").hidden=false;
+  health();load();
+  if(refreshTimer)clearInterval(refreshTimer);
+  if(healthTimer)clearInterval(healthTimer);
+  refreshTimer=setInterval(load,15000);
+  healthTimer=setInterval(health,30000);
+}
+let currentRole="user";
+function showLogin(){
+  currentRole="user";
+  $("usersButton").hidden=true;
+  $("sidebarUsersButton").hidden=true;
+  $("adminUsersPanel").hidden=true;
+  $("loginScreen").hidden=false;
+  document.body.classList.add("locked");
+  $("logoutButton").hidden=true;
+  $("loginPassword").value="";
+  $("loginError").textContent="";
+}
+async function checkSession(){
+  try{
+    const r=await fetch("/api/session",{credentials:"same-origin"});
+    if(r.ok){const data=await r.json();showDashboard(data.role);return;}
+  }catch{}
+  showLogin();
+}
+$("loginForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const button=$("loginButton");
+  const username=$("loginUsername").value.trim();
+  const password=$("loginPassword").value;
+  $("loginError").textContent="";
+  button.disabled=true;button.textContent="Verificando...";
+  try{
+    const r=await fetch("/api/login",{
+      method:"POST",credentials:"same-origin",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({username,password})
+    });
+    const data=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(data.error||"Não foi possível entrar.");
+    $("loginPassword").value="";
+    showDashboard(data.role);
+  }catch(err){
+    $("loginError").textContent=err.message||"Falha ao conectar. Tente novamente.";
+  }finally{
+    button.disabled=false;button.textContent="Entrar no sistema";
+  }
+});
+
+async function refreshUsers(){
+  const r=await fetch("/api/admin/users",{credentials:"same-origin"});
+  const data=await r.json().catch(()=>[]);
+  if(!r.ok)throw new Error(data.error||"Não foi possível carregar usuários.");
+  $("userList").innerHTML=data.length?data.map(u=>`<li><b>${esc(u.username)}</b> <span class="muted">· cadastrado em ${new Date(u.created_at).toLocaleDateString("pt-BR")}</span></li>`).join(""):"<li>Nenhum usuário adicional cadastrado.</li>";
+}
+$("usersButton").addEventListener("click",async()=>{
+  $("adminUsersPanel").hidden=false;
+  try{await refreshUsers();}catch(err){toast(err.message);}
+  $("adminUsersPanel").scrollIntoView({behavior:"smooth",block:"start"});
+});
+$("closeUsersButton").addEventListener("click",()=>$("adminUsersPanel").hidden=true);
+$("createUserForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const form=e.currentTarget, button=$("createUserButton");
+  const values=Object.fromEntries(new FormData(form));
+  $("createUserError").textContent="";button.disabled=true;button.textContent="Cadastrando...";
+  try{
+    const r=await fetch("/api/admin/users",{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json"},body:JSON.stringify(values)});
+    const data=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(data.error||"Não foi possível cadastrar.");
+    form.reset();toast("Usuário cadastrado com sucesso.");await refreshUsers();
+  }catch(err){$("createUserError").textContent=err.message||"Erro ao cadastrar usuário.";}
+  finally{button.disabled=false;button.textContent="Cadastrar usuário";}
+});
+
+$("logoutButton").addEventListener("click",async()=>{
+  try{await fetch("/api/logout",{method:"POST",credentials:"same-origin"});}catch{}
+  if(refreshTimer)clearInterval(refreshTimer);
+  if(healthTimer)clearInterval(healthTimer);
+  $("queue").innerHTML="";
+  $("all").innerHTML="";
+  showLogin();
+});
+
+// Navegação lateral: mantém as seções e funções existentes do sistema.
+document.querySelectorAll("[data-nav]").forEach(link => {
+  link.addEventListener("click", event => {
+    const targetId = link.getAttribute("href").slice(1);
+    if (targetId === "knowledge") {
+      event.preventDefault();
+      toast("A área de Conhecimento será adicionada em uma próxima etapa.");
+      return;
+    }
+    const target = document.getElementById(targetId);
+    if (target) {
+      event.preventDefault();
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      document.querySelectorAll("[data-nav]").forEach(item => item.classList.toggle("active", item === link));
+    }
+  });
+});
+$("sidebarUsersButton").addEventListener("click", () => $("usersButton").click());
+$("sidebarLogoutButton").addEventListener("click", () => $("logoutButton").click());
+
+checkSession();
+
+</script></body></html>
