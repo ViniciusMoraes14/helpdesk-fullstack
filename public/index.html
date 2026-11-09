@@ -219,7 +219,29 @@ textarea{min-height:92px;resize:vertical}
 .login-kicker{color:#6ee7b7;text-transform:uppercase;font-weight:800;font-size:10px;letter-spacing:1.7px;margin:0 0 7px}
 .login-card h1{font-size:25px;letter-spacing:-.7px;margin:0 0 7px}
 .login-subtitle{color:#8e9db8;font-size:12px;margin:0 0 24px}
+
 .login-card form{gap:15px}
+/* Mantém qualquer etapa oculta realmente fora do layout, mesmo com regras display:flex/grid. */
+.login-card [hidden]{display:none!important}
+.forgot-password-trigger{
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  width:100%;margin-top:2px;padding:11px 14px;
+  border:1px solid rgba(52,211,153,.24);border-radius:11px;
+  background:linear-gradient(110deg,rgba(16,185,129,.11),rgba(16,185,129,.045));
+  color:#8ceac5;font:650 12px/1.3 inherit;letter-spacing:.1px;
+  cursor:pointer;transition:background .18s ease,border-color .18s ease,
+    box-shadow .18s ease,transform .18s ease;
+}
+.forgot-password-trigger:hover{
+  background:linear-gradient(110deg,rgba(16,185,129,.2),rgba(16,185,129,.09));
+  border-color:rgba(52,211,153,.48);
+  box-shadow:0 7px 20px rgba(16,185,129,.1);
+  transform:translateY(-1px);
+}
+.forgot-password-trigger:focus-visible{
+  outline:2px solid #6ee7b7;outline-offset:3px;
+}
+.forgot-password-trigger svg{width:16px;height:16px;flex:none}
 .login-card label{font-size:12px}
 .login-card input{padding:13px 14px;font-size:13px}
 .login-error{min-height:17px;color:#ff8c9b;font-size:12px;margin:0}
@@ -268,7 +290,6 @@ body:not(.locked) > header:after { display:none; }
 body:not(.locked) > header .logo { display:none; }
 body:not(.locked) > header .header-actions { margin-left:auto; }
 body:not(.locked) > main { max-width:none;margin:0;padding:26px 28px 38px; }
-body:not(.locked) > main:before { content:"SERVICE DESK / TI";display:block;color:#6ee7b7;font-size:10px;font-weight:800;letter-spacing:1.6px;margin-bottom:4px; }
 body:not(.locked) .stats { gap:14px; }
 body:not(.locked) .card, body:not(.locked) .panel { border-radius:14px; }
 body:not(.locked) .card { background:#102129; }
@@ -298,6 +319,40 @@ body:not(.locked) .primary { border-radius:9px; }
 }
 body.locked .app-sidebar { display:none; }
 
+
+/* Navegação por páginas independentes */
+.app-page[hidden]{display:none!important}
+.page-heading{margin:0 0 20px}
+.page-heading .page-kicker{margin:0 0 5px;color:#6ee7b7;font-size:10px;font-weight:800;letter-spacing:1.6px}
+.page-heading h1{margin:0;color:#effcf7;font-size:25px;letter-spacing:-.7px}
+.page-heading #pageSubtitle{margin:5px 0 0;color:#91aaa3;font-size:12px}
+.page-intro{margin-top:18px}
+.page-intro h2{margin:0 0 6px;font-size:16px}
+.page-intro p{margin:0;color:#91aaa3;font-size:12px}
+.knowledge-empty{text-align:center;padding:44px 20px}
+.knowledge-mark{width:54px;height:54px;margin:0 auto 14px;display:grid;place-items:center;border-radius:16px;background:rgba(16,185,129,.13);border:1px solid rgba(52,211,153,.2);color:#6ee7b7;font-size:27px}
+.knowledge-empty h3{margin:0 0 7px;font-size:17px}
+.knowledge-empty p{max-width:470px;margin:0 auto 16px;color:#91aaa3;font-size:12px}
+
+/* Módulo SLA — mantém a paleta escura e verde-esmeralda existente */
+.sla-stats{margin-bottom:18px}
+.sla-stats .card strong{font-variant-numeric:tabular-nums}
+.sla-status{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:750;white-space:nowrap}
+.sla-ok{background:rgba(16,185,129,.13);color:#6ee7b7}
+.sla-warn{background:rgba(245,158,11,.14);color:#fbbf24}
+.sla-bad{background:rgba(239,68,68,.14);color:#fca5a5}
+.sla-muted{background:rgba(148,163,184,.13);color:#cbd5e1}
+.sla-time{font-weight:750;font-variant-numeric:tabular-nums}
+.sla-time.overdue{color:#fca5a5}
+.sla-policy-note{display:block;color:var(--muted,#94a3b8);font-size:11px;margin-top:4px}
+.sla-holidays{border-top:1px solid var(--line,#263746);margin-top:22px;padding-top:18px}
+.sla-holiday-form{display:grid;grid-template-columns:minmax(130px,.7fr) minmax(180px,1.4fr) auto;gap:12px;align-items:end;margin:14px 0}
+.sla-holiday-form label{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted,#94a3b8)}
+.sla-holiday-form input,.sla-policy-input{background:var(--input,#101d2a);color:var(--text,#e5edf5);border:1px solid var(--line,#263746);border-radius:9px;padding:10px;min-width:0}
+.sla-policy-input{width:120px}
+.sla-policy-form{display:flex;gap:10px;flex-wrap:wrap}
+#slaPolicyForm .table{margin-bottom:14px}
+@media(max-width:700px){.sla-holiday-form{grid-template-columns:1fr}.sla-policy-input{width:90px}.sla-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style></head>
 <body class="locked">
 
@@ -309,7 +364,7 @@ body.locked .app-sidebar { display:none; }
     </div>
     <p class="login-kicker">Acesso seguro</p>
     <h1 id="loginTitle">Bem-vindo de volta</h1>
-    <p class="login-subtitle">Entre com suas credenciais para acessar o painel.</p>
+    <p id="loginSubtitle" class="login-subtitle">Entre com suas credenciais para acessar o painel.</p>
     <form id="loginForm" autocomplete="on">
       <label for="loginUsername">Usuário
         <input id="loginUsername" name="username" autocomplete="username" required placeholder="Seu usuário">
@@ -319,6 +374,26 @@ body.locked .app-sidebar { display:none; }
       </label>
       <p id="loginError" class="login-error" role="alert" aria-live="polite"></p>
       <button id="loginButton" class="btn primary" type="submit">Entrar no sistema</button>
+      <button id="forgotPasswordButton" class="forgot-password-trigger" type="button">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 3.5 19 6v5.1c0 4.5-2.9 7.7-7 9.4-4.1-1.7-7-4.9-7-9.4V6l7-2.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+          <path d="M9.5 12.2 11.2 14l3.5-3.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Esqueci minha senha
+      </button>
+    </form>
+    <form id="forgotPasswordForm" hidden style="margin-top:18px">
+      <h3>Recuperar acesso</h3><p class="login-subtitle">Informe o e-mail cadastrado pelo administrador.</p>
+      <label for="recoveryEmail">E-mail<input id="recoveryEmail" type="email" required maxlength="254" placeholder="seu@email.com"></label>
+      <p id="recoveryMessage" class="login-error" role="status" aria-live="polite"></p>
+      <button class="btn primary" type="submit">Enviar link de recuperação</button>
+      <button id="backToLoginButton" class="forgot-password-trigger" type="button">← Voltar ao login</button>
+    </form>
+    <form id="resetPasswordForm" hidden style="margin-top:18px">
+      <h3>Definir nova senha</h3><p class="login-subtitle">Escolha uma senha com pelo menos 10 caracteres.</p>
+      <label for="newPassword">Nova senha<input id="newPassword" type="password" required minlength="10" maxlength="128" autocomplete="new-password"></label>
+      <p id="resetMessage" class="login-error" role="alert" aria-live="polite"></p>
+      <button class="btn primary" type="submit">Salvar nova senha</button>
     </form>
     <div class="login-footer"><span class="dot"></span> Sessão protegida · Help Desk Online</div>
   </section>
@@ -329,10 +404,10 @@ body.locked .app-sidebar { display:none; }
   <div class="app-brand"><div class="app-brand-mark">HD</div><div class="app-brand-copy"><strong>HelpDesk</strong><small>TI Pro · Service Desk</small></div></div>
   <nav class="app-nav">
     <a class="active" href="#dashboard" data-nav="dashboard"><span class="nav-symbol">⌂</span><span class="nav-label">Dashboard</span></a>
-    <a href="#allTickets" data-nav="tickets"><span class="nav-symbol">▣</span><span class="nav-label">Chamados</span></a>
-    <a href="#queuePanel" data-nav="queue"><span class="nav-symbol">⌛</span><span class="nav-label">Fila de chamados</span></a>
-    <a href="#newTicketForm" data-nav="new"><span class="nav-symbol">＋</span><span class="nav-label">Novo chamado</span></a>
-    <button id="sidebarUsersButton" type="button" hidden><span class="nav-symbol">♙</span><span class="nav-label">Usuários</span></button>
+    <a href="#tickets" data-nav="tickets"><span class="nav-symbol">▣</span><span class="nav-label">Chamados</span></a>
+    <a href="#queue" data-nav="queue"><span class="nav-symbol">⌛</span><span class="nav-label">Fila de chamados</span></a>
+    <a href="#new" data-nav="new"><span class="nav-symbol">＋</span><span class="nav-label">Novo chamado</span></a>
+    <button id="sidebarUsersButton" type="button" data-nav="users" hidden><span class="nav-symbol">♙</span><span class="nav-label">Usuários</span></button>
     <a href="#knowledge" data-nav="knowledge"><span class="nav-symbol">◇</span><span class="nav-label">Conhecimento</span></a>
   </nav>
   <div class="sidebar-bottom"><div class="sidebar-status"><span class="dot"></span><span id="sidebarStatus">Sistema operacional</span></div><button id="sidebarLogoutButton" type="button"><span>↪</span> <span class="logout-label">Sair</span></button></div>
@@ -340,45 +415,109 @@ body.locked .app-sidebar { display:none; }
 
 <header><div class="logo"><div class="icon">◈</div><div><b>Help Desk Online</b><br><small>Central de atendimento</small></div></div><div class="header-actions"><div class="online"><span class="dot"></span><span id="apiStatus">Verificando API...</span></div><button id="usersButton" class="nav-btn" type="button" hidden>Usuários +</button><button id="logoutButton" class="logout-btn" type="button" hidden>Sair ↗</button></div></header>
 <main>
-<section id="adminUsersPanel" class="panel admin-panel" hidden>
+  <div class="page-heading">
+    <p class="page-kicker">SERVICE DESK / TI</p>
+    <h1 id="pageTitle">Dashboard</h1>
+    <p id="pageSubtitle">Visão geral da operação e indicadores de atendimento.</p>
+  </div>
+
+  <section class="app-page" id="page-dashboard">
+    <section class="stats" id="dashboard">
+<div class="card"><small>Na fila</small><strong id="q">0</strong><small>aguardando</small></div>
+<div class="card"><small>Maior espera</small><strong id="wait">0 min</strong><small>tempo na fila</small></div>
+<div class="card"><small>Em atendimento</small><strong id="active">0</strong><small>agentes</small></div>
+<div class="card"><small>SLA</small><strong id="sla">100%</strong><small>prazos configurados</small></div>
+<div class="card"><small>Servidor</small><strong id="server">—</strong><small>API + PostgreSQL</small></div>
+</section>
+    <section class="panel page-intro">
+      <h2>Visão geral</h2>
+      <p>Acompanhe os indicadores de atendimento. Use o menu lateral para acessar cada área do Help Desk.</p>
+    </section>
+  </section>
+
+  <section class="app-page" id="page-tickets" hidden>
+    <section class="panel table-wrap" id="allTickets"><div class="head"><h2>Todos os chamados</h2></div>
+<table class="table"><thead><tr><th>Protocolo</th><th>Solicitante</th><th>Assunto</th><th>Prioridade</th><th>Status</th><th>Espera</th><th>SLA</th><th>Ações</th></tr></thead><tbody id="all"></tbody></table>
+</section>
+  </section>
+
+  <section class="app-page" id="page-queue" hidden>
+    <section class="panel" id="queuePanel"><div class="head"><div><h2>Fila de espera</h2><span class="muted">Atualização automática</span></div><button class="btn gray" onclick="load()">↻ Atualizar</button></div><div id="queue" class="queue"></div></section>
+  </section>
+
+  <section class="app-page" id="page-sla" hidden>
+    <section class="stats sla-stats">
+      <div class="card"><small>Total de chamados</small><strong id="slaTotal">0</strong><small>no sistema</small></div>
+      <div class="card"><small>Em andamento</small><strong id="slaActive">0</strong><small>com relógio ativo</small></div>
+      <div class="card"><small>Aguardando solicitante</small><strong id="slaPaused">0</strong><small>relógio pausado</small></div>
+      <div class="card"><small>SLA vencido</small><strong id="slaBreached">0</strong><small>primeiro atendimento ou resolução</small></div>
+      <div class="card"><small>Conformidade</small><strong id="slaCompliance">100%</strong><small>chamados dentro do prazo</small></div>
+    </section>
+    <section class="panel">
+      <div class="head"><div><h2>Acompanhamento de SLA</h2><span class="muted">Horário comercial: segunda a sexta, das 09h às 18h · America/Sao_Paulo</span></div><button class="btn gray" type="button" onclick="loadSlaDashboard()">↻ Atualizar</button></div>
+      <div class="table-wrap"><table class="table"><thead><tr><th>Protocolo</th><th>Assunto</th><th>Prioridade</th><th>Primeiro atendimento</th><th>Resolução</th><th>Situação</th></tr></thead><tbody id="slaTickets"><tr><td colspan="6">Carregando indicadores...</td></tr></tbody></table></div>
+    </section>
+    <section class="panel admin-sla-settings" id="slaAdminSettings" hidden>
+      <div class="head"><div><h2>Políticas de SLA</h2><span class="muted">Prazos aplicados a novos chamados; chamados existentes mantêm o prazo original.</span></div></div>
+      <form id="slaPolicyForm">
+        <div class="table-wrap"><table class="table"><thead><tr><th>Prioridade</th><th>Primeiro atendimento (min)</th><th>Resolução (min)</th></tr></thead><tbody id="slaPolicyRows"></tbody></table></div>
+        <button class="btn primary" type="submit" id="saveSlaPolicies">Salvar políticas</button>
+        <span class="muted">Os minutos são contados somente dentro do horário comercial.</span>
+      </form>
+      <div class="sla-holidays">
+        <h3>Feriados e dias sem expediente</h3>
+        <form id="slaHolidayForm" class="sla-holiday-form">
+          <label>Data<input type="date" name="date" required></label>
+          <label>Descrição<input name="description" maxlength="160" required placeholder="Ex.: Feriado municipal"></label>
+          <button class="btn primary" type="submit">Adicionar feriado</button>
+        </form>
+        <ul id="slaHolidayList" class="user-list"></ul>
+      </div>
+    </section>
+  </section>
+
+  <section class="app-page" id="page-new" hidden>
+    <section class="panel" id="newTicketPanel">
+      <div class="head"><div><h2>Novo chamado</h2><span class="muted">API REST + banco online</span></div></div>
+      <form id="newTicketForm">
+        <label>Solicitante<input name="requester" required placeholder="Nome"></label>
+        <label>Departamento<input name="department" placeholder="Financeiro, TI..."></label>
+        <label>CEP <div class="lookup"><input id="cep" maxlength="9" placeholder="00000-000"><button type="button" class="btn" onclick="cepLookup()">Consultar</button></div></label>
+        <div id="address" class="address"></div>
+        <label>Categoria<select name="category"><option>Hardware</option><option>Software</option><option>Acesso</option><option>Rede</option><option>SAP</option><option>Outros</option></select></label>
+        <label>Prioridade<select name="priority"><option>Média</option><option>Baixa</option><option>Alta</option><option>Crítica</option></select></label>
+        <label>Assunto<input name="subject" required placeholder="Problema encontrado"></label>
+        <label>Descrição<textarea name="description" required placeholder="Descreva o problema..."></textarea></label>
+        <button class="btn primary">+ Abrir chamado</button>
+      </form>
+    </section>
+  </section>
+
+  <section class="app-page" id="page-users" hidden>
+    <section id="adminUsersPanel" class="panel admin-panel">
   <div class="head"><div><h2>Cadastro de usuários</h2><span class="muted">Somente o administrador pode criar contas.</span></div><button id="closeUsersButton" class="btn gray" type="button">Fechar</button></div>
   <form id="createUserForm">
     <label>Novo usuário<input name="username" required minlength="3" maxlength="40" pattern="[a-zA-Z0-9._-]+" autocomplete="off" placeholder="ex.: joao.silva"></label>
+    <label>E-mail para recuperação<input name="email" type="email" required maxlength="254" placeholder="joao@email.com"></label>
     <label>Senha inicial<input name="password" type="password" required minlength="10" maxlength="128" autocomplete="new-password" placeholder="Mínimo de 10 caracteres"></label>
     <div class="admin-actions"><button id="createUserButton" class="btn primary" type="submit">Cadastrar usuário</button><span class="muted">A senha será armazenada com hash seguro.</span></div>
     <p id="createUserError" class="login-error" role="alert" aria-live="polite"></p>
   </form>
   <div><h3>Usuários cadastrados</h3><ul id="userList" class="user-list"></ul></div>
 </section>
-<section class="stats" id="dashboard">
-<div class="card"><small>Na fila</small><strong id="q">0</strong><small>aguardando</small></div>
-<div class="card"><small>Maior espera</small><strong id="wait">0 min</strong><small>limite: 15 min</small></div>
-<div class="card"><small>Em atendimento</small><strong id="active">0</strong><small>agentes</small></div>
-<div class="card"><small>SLA</small><strong id="sla">100%</strong><small>até 15 min</small></div>
-<div class="card"><small>Servidor</small><strong id="server">—</strong><small>API + PostgreSQL</small></div>
-</section>
+  </section>
 
-<div class="grid">
-<section class="panel" id="queuePanel"><div class="head"><div><h2>Fila de espera</h2><span class="muted">Atualização automática</span></div><button class="btn gray" onclick="load()">↻ Atualizar</button></div><div id="queue" class="queue"></div></section>
-
-<section class="panel">
-<div class="head"><div><h2>Novo chamado</h2><span class="muted">API REST + banco online</span></div></div>
-<form id="newTicketForm">
-<label>Solicitante<input name="requester" required placeholder="Nome"></label>
-<label>Departamento<input name="department" placeholder="Financeiro, TI..."></label>
-<label>CEP <div class="lookup"><input id="cep" maxlength="9" placeholder="00000-000"><button type="button" class="btn" onclick="cepLookup()">Consultar</button></div></label>
-<div id="address" class="address"></div>
-<label>Categoria<select name="category"><option>Hardware</option><option>Software</option><option>Acesso</option><option>Rede</option><option>SAP</option><option>Outros</option></select></label>
-<label>Prioridade<select name="priority"><option>Média</option><option>Baixa</option><option>Alta</option><option>Crítica</option></select></label>
-<label>Assunto<input name="subject" required placeholder="Problema encontrado"></label>
-<label>Descrição<textarea name="description" required placeholder="Descreva o problema..."></textarea></label>
-<button class="btn primary">+ Abrir chamado</button>
-</form>
-</section></div>
-
-<section class="panel table-wrap" id="allTickets"><div class="head"><h2>Todos os chamados</h2></div>
-<table class="table"><thead><tr><th>Protocolo</th><th>Solicitante</th><th>Assunto</th><th>Prioridade</th><th>Status</th><th>Espera</th><th>Ações</th></tr></thead><tbody id="all"></tbody></table>
-</section>
+  <section class="app-page" id="page-knowledge" hidden>
+    <section class="panel knowledge-panel">
+      <div class="head"><div><h2>Base de conhecimento</h2><span class="muted">Central de artigos e soluções</span></div></div>
+      <div class="knowledge-empty">
+        <div class="knowledge-mark">◇</div>
+        <h3>Base de conhecimento</h3>
+        <p>Esta área está preparada para receber artigos, tutoriais e soluções frequentes de TI.</p>
+        <span class="tag">Próxima etapa do projeto</span>
+      </div>
+    </section>
+  </section>
 </main><div id="toast" class="toast"></div>
 <script>
 const $=x=>document.getElementById(x), esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
@@ -386,37 +525,261 @@ function toast(x){$("toast").textContent=x;$("toast").classList.add("show");setT
 function pc(p){return p==="Alta"||p==="Crítica"?"high":p==="Média"?"medium":"low"}
 function wt(n){return n<1?"agora":n+" min"}
 async function health(){try{let r=await fetch("/api/health");let d=await r.json();$("apiStatus").textContent=d.online?"API + PostgreSQL online":"API com erro";$("server").textContent=d.online?"ONLINE":"ERRO";$("sidebarStatus").textContent=d.online?"Sistema operacional":"API com erro"}catch{$("apiStatus").textContent="API offline";$("server").textContent="OFFLINE";$("sidebarStatus").textContent="API offline"}}
+function normalizeTicketsResponse(payload){
+  // Aceita tanto o formato { tickets: [], queue: [] } quanto uma lista simples.
+  const source = Array.isArray(payload) ? payload :
+    (payload && Array.isArray(payload.tickets) ? payload.tickets :
+    (payload && Array.isArray(payload.data) ? payload.data :
+    (payload && Array.isArray(payload.rows) ? payload.rows : [])));
+
+  const tickets = source.map(t => ({
+    ...t,
+    id: t.id ?? t.ticket_id ?? t.protocol ?? "—",
+    requester: t.requester ?? t.requester_name ?? t.user ?? "Não informado",
+    department: t.department ?? t.departamento ?? "—",
+    subject: t.subject ?? t.title ?? t.assunto ?? "Sem assunto",
+    priority: t.priority ?? t.prioridade ?? "Média",
+    category: t.category ?? t.categoria ?? "Outros",
+    status: t.status ?? "Aberto",
+    waitMinutes: Number(t.waitMinutes ?? t.wait_minutes ?? t.waiting_minutes ?? 0)
+  }));
+
+  // Se o backend não enviar uma fila separada, monta a fila com chamados ainda não atendidos.
+  const hasQueue = payload && !Array.isArray(payload) && Array.isArray(payload.queue);
+  const queueSource = hasQueue ? payload.queue : tickets.filter(t =>
+    !["Em atendimento", "Resolvido", "Fechado", "Concluído", "Concluido"].includes(t.status)
+  );
+
+  const queue = queueSource.map(t => ({
+    ...t,
+    id: t.id ?? t.ticket_id ?? t.protocol ?? "—",
+    requester: t.requester ?? t.requester_name ?? t.user ?? "Não informado",
+    department: t.department ?? t.departamento ?? "—",
+    subject: t.subject ?? t.title ?? t.assunto ?? "Sem assunto",
+    priority: t.priority ?? t.prioridade ?? "Média",
+    category: t.category ?? t.categoria ?? "Outros",
+    status: t.status ?? "Aberto",
+    waitMinutes: Number(t.waitMinutes ?? t.wait_minutes ?? t.waiting_minutes ?? 0)
+  }));
+
+  return { tickets, queue };
+}
+
 async function load(){
- try{let r=await fetch("/api/tickets");let d=await r.json();render(d)}catch{toast("Não foi possível conectar à API.")}
+  try {
+    const response = await fetch("/api/tickets", { credentials: "same-origin" });
+    const payload = await response.json().catch(() => null);
+    if (!response.ok) {
+      throw new Error(payload?.error || "A API não conseguiu carregar os chamados.");
+    }
+    const data = normalizeTicketsResponse(payload);
+    render(data);
+  } catch (error) {
+    $("queue").innerHTML = `<div class="empty">Não foi possível carregar a fila. Verifique a conexão com a API.</div>`;
+    $("all").innerHTML = `<tr><td colspan="8">Não foi possível carregar os chamados.</td></tr>`;
+    toast(error.message || "Não foi possível conectar à API.");
+  }
 }
-function render(d){
- $("q").textContent=d.queue.length;
- let max=d.queue.length?Math.max(...d.queue.map(x=>x.waitMinutes)):0;
- $("wait").textContent=max+" min";$("wait").className=max>15?"late":"";
- $("active").textContent=d.tickets.filter(x=>x.status==="Em atendimento").length;
- let sla=d.queue.length?Math.round(d.queue.filter(x=>x.waitMinutes<=15).length/d.queue.length*100):100;
- $("sla").textContent=sla+"%";$("sla").className=sla<100?"late":"";
- $("queue").innerHTML=d.queue.length?d.queue.map((t,i)=>`<article class="ticket"><div class="rank">#${i+1}</div><div><h3>${esc(t.subject)}</h3><p>${esc(t.id)} · ${esc(t.requester)} · ${esc(t.department)}</p><div class="tags"><span class="tag ${pc(t.priority)}">${esc(t.priority)}</span><span class="tag">${esc(t.category)}</span></div></div><div><div class="timer ${t.waitMinutes>15?"late":""}">⏱ ${wt(t.waitMinutes)}</div><button class="btn green" onclick="update('${t.id}','Em atendimento')">Atender</button></div></article>`).join(""):`<div class="empty">A fila está vazia.</div>`;
- $("all").innerHTML=d.tickets.map(t=>`<tr><td><b>${esc(t.id)}</b></td><td>${esc(t.requester)}</td><td>${esc(t.subject)}</td><td><span class="tag ${pc(t.priority)}">${esc(t.priority)}</span></td><td>${esc(t.status)}</td><td>${wt(t.waitMinutes)}</td><td>${t.status==="Em atendimento"?`<button class="btn gray" onclick="update('${t.id}','Resolvido')">Finalizar</button>`:`<button class="btn green" onclick="update('${t.id}','Em atendimento')">Atender</button>`} <button class="btn red" onclick="removeT('${t.id}')">Excluir</button></td></tr>`).join("");
+
+function render(data){
+  const tickets = Array.isArray(data?.tickets) ? data.tickets : [];
+  const queue = Array.isArray(data?.queue) ? data.queue : [];
+
+  $("q").textContent = queue.length;
+  const max = queue.length ? Math.max(...queue.map(x => Number(x.waitMinutes) || 0)) : 0;
+  $("wait").textContent = max + " min";
+  $("wait").className = max > 15 ? "late" : "";
+  $("active").textContent = tickets.filter(x => x.status === "Em atendimento").length;
+  const sla = queue.length ? Math.round(queue.filter(x => (Number(x.waitMinutes) || 0) <= 15).length / queue.length * 100) : 100;
+  $("sla").textContent = sla + "%";
+  $("sla").className = sla < 100 ? "late" : "";
+
+  $("queue").innerHTML = queue.length ? queue.map((t,i) => `
+    <article class="ticket">
+      <div class="rank">#${i+1}</div>
+      <div>
+        <h3>${esc(t.subject)}</h3>
+        <p>${esc(t.id)} · ${esc(t.requester)} · ${esc(t.department)}</p>
+        <div class="tags">
+          <span class="tag ${pc(t.priority)}">${esc(t.priority)}</span>
+          <span class="tag">${esc(t.category)}</span>
+        </div>
+      </div>
+      <div>
+        <div class="timer ${(Number(t.waitMinutes)||0)>15?"late":""}">⏱ ${wt(Number(t.waitMinutes)||0)}</div>
+        <button class="btn green" onclick="update('${esc(t.id)}','Em atendimento')">Atender</button>
+      </div>
+    </article>`).join("") : `<div class="empty">A fila está vazia no momento.</div>`;
+
+  $("all").innerHTML = tickets.length ? tickets.map(t => `
+    <tr>
+      <td><b>${esc(t.id)}</b></td>
+      <td>${esc(t.requester)}</td>
+      <td>${esc(t.subject)}</td>
+      <td><span class="tag ${pc(t.priority)}">${esc(t.priority)}</span></td>
+      <td>${esc(t.status)}</td>
+      <td>${wt(Number(t.waitMinutes)||0)}</td>
+      <td>
+        ${t.status==="Em atendimento"
+          ? `<button class="btn gray" onclick="update('${esc(t.id)}','Resolvido')">Finalizar</button>`
+          : `<button class="btn green" onclick="update('${esc(t.id)}','Em atendimento')">Atender</button>`}
+        <button class="btn red" onclick="removeT('${esc(t.id)}')">Excluir</button>
+      </td>
+    </tr>`).join("") : `<tr><td colspan="8"><div class="empty">Nenhum chamado cadastrado.</div></td></tr>`;
 }
-async function update(id,status){await fetch("/api/tickets/"+id,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({status,assigned_to:status==="Em atendimento"?"Agente 01":null})});toast(status==="Resolvido"?"Chamado finalizado.":"Chamado em atendimento.");load()}
-async function removeT(id){if(!confirm("Excluir chamado?"))return;await fetch("/api/tickets/"+id,{method:"DELETE"});toast("Chamado excluído.");load()}
-$("newTicketForm").onsubmit=async e=>{e.preventDefault();let data=Object.fromEntries(new FormData(e.target));let r=await fetch("/api/tickets",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});if(r.ok){let t=await r.json();e.target.reset();toast("Chamado "+t.id+" criado.");load()}else toast("Erro ao criar chamado.")};
+async function update(id,status){
+  try{
+    const changes={status};
+    if(status==="Em atendimento")changes.assigned_to="Agente 01";
+    const r=await fetch("/api/tickets/"+encodeURIComponent(id),{method:"PATCH",credentials:"same-origin",headers:{"Content-Type":"application/json"},body:JSON.stringify(changes)});
+    const data=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(data.error||"Não foi possível atualizar o chamado.");
+    toast(status==="Resolvido"?"Chamado finalizado.":status==="Aguardando solicitante"?"SLA pausado enquanto aguarda o solicitante.":status==="Em atendimento"?"Atendimento iniciado ou retomado.":"Chamado atualizado.");await load();
+  }catch(err){toast(err.message||"Erro ao atualizar chamado.");}
+}
+async function removeT(id){
+  if(!confirm("Excluir chamado?"))return;
+  try{
+    const r=await fetch("/api/tickets/"+encodeURIComponent(id),{method:"DELETE",credentials:"same-origin"});
+    const data=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(data.error||"Não foi possível excluir o chamado.");
+    toast("Chamado excluído.");await load();
+  }catch(err){toast(err.message||"Erro ao excluir chamado.");}
+}
+$("newTicketForm").onsubmit=async e=>{
+  e.preventDefault();
+  const button=e.target.querySelector('button[type="submit"],button:not([type])');
+  if(button){button.disabled=true;button.textContent="Registrando...";}
+  try {
+    const data=Object.fromEntries(new FormData(e.target));
+    const r=await fetch("/api/tickets",{
+      method:"POST",
+      credentials:"same-origin",
+      headers:{"Content-Type":"application/json","Accept":"application/json"},
+      body:JSON.stringify(data)
+    });
+    const result=await r.json().catch(()=>({}));
+    if(!r.ok) throw new Error(result.details || result.error || "Falha ao registrar chamado.");
+    e.target.reset();
+    toast("Chamado "+result.id+" criado com sucesso.");
+    await load();
+  } catch(err) {
+    console.error("Falha ao abrir chamado:",err);
+    toast(err.message || "Não foi possível registrar o chamado.");
+  } finally {
+    if(button){button.disabled=false;button.textContent="+ Abrir chamado";}
+  }
+};
+function slaBadge(ticket){
+  const s=ticket.sla||{};
+  const cls=s.paused?"sla-muted":(s.firstResponseBreached||s.resolutionBreached?"sla-bad":s.resolved?"sla-ok":"sla-ok");
+  return `<span class="sla-status ${cls}">${esc(s.statusLabel||"Sem dados")}</span>`;
+}
+function slaCell(value, breached, met, paused){
+  const cls=paused?"sla-muted":breached?"sla-bad":"sla-ok";
+  const label=paused?"Pausado":breached?"Vencido":met?"Cumprido":"Restante";
+  return `<div class="sla-time ${breached?'overdue':''}">${esc(value||"—")}</div><span class="sla-policy-note">${label}</span>`;
+}
+async function loadSlaDashboard(){
+  const body=$("slaTickets");
+  if(!body)return;
+  body.innerHTML='<tr><td colspan="6">Carregando indicadores...</td></tr>';
+  try{
+    const r=await fetch("/api/sla/dashboard",{credentials:"same-origin"});
+    const data=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(data.error||"Falha ao carregar SLA.");
+    $("slaTotal").textContent=data.summary.total;
+    $("slaActive").textContent=data.summary.active;
+    $("slaPaused").textContent=data.summary.paused;
+    $("slaBreached").textContent=data.summary.breached;
+    $("slaCompliance").textContent=data.summary.compliance+"%";
+    body.innerHTML=data.tickets.length?data.tickets.map(t=>{
+      const s=t.sla||{};
+      return `<tr>
+        <td><b>${esc(t.id)}</b></td>
+        <td>${esc(t.subject)}</td>
+        <td><span class="tag ${pc(t.priority)}">${esc(t.priority)}</span></td>
+        <td>${slaCell(s.firstResponseRemaining,s.firstResponseBreached,s.firstResponseMet,s.paused&&!t.firstResponseAt)}</td>
+        <td>${slaCell(s.resolutionRemaining,s.resolutionBreached,s.resolutionMet,s.paused&&!s.resolved)}</td>
+        <td>${slaBadge(t)}</td>
+      </tr>`;
+    }).join(""):'<tr><td colspan="6">Nenhum chamado cadastrado.</td></tr>';
+  }catch(e){body.innerHTML=`<tr><td colspan="6">${esc(e.message)}</td></tr>`;toast(e.message);}
+}
+async function loadSlaPolicies(){
+  const r=await fetch("/api/sla/policies",{credentials:"same-origin"});
+  const data=await r.json().catch(()=>[]);
+  if(!r.ok)throw new Error(data.error||"Não foi possível carregar políticas.");
+  $("slaPolicyRows").innerHTML=data.map(p=>`<tr>
+    <td><b>${esc(p.priority)}</b></td>
+    <td><input class="sla-policy-input" type="number" min="1" max="100000" required name="response_${esc(p.priority)}" value="${Number(p.first_response_minutes)}"></td>
+    <td><input class="sla-policy-input" type="number" min="1" max="100000" required name="resolution_${esc(p.priority)}" value="${Number(p.resolution_minutes)}"></td>
+  </tr>`).join("");
+}
+async function loadSlaHolidays(){
+  const r=await fetch("/api/sla/holidays",{credentials:"same-origin"});
+  const data=await r.json().catch(()=>[]);
+  if(!r.ok)throw new Error(data.error||"Não foi possível carregar feriados.");
+  $("slaHolidayList").innerHTML=data.length?data.map(h=>`<li><b>${esc(new Date(h.date+"T12:00:00").toLocaleDateString("pt-BR"))}</b> · ${esc(h.description)} <button class="btn red" type="button" onclick="deleteSlaHoliday('${esc(h.date)}')">Remover</button></li>`).join(""):'<li class="muted">Nenhum feriado cadastrado.</li>';
+}
+async function loadSlaAdmin(){
+  if(currentRole!=="admin")return;
+  $("slaAdminSettings").hidden=false;
+  try{await Promise.all([loadSlaPolicies(),loadSlaHolidays()]);}
+  catch(e){toast(e.message);}
+}
+$("slaPolicyForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const form=Object.fromEntries(new FormData(e.currentTarget));
+  const policies=["Crítica","Alta","Média","Baixa"].map(priority=>({
+    priority,
+    first_response_minutes:Number(form["response_"+priority]),
+    resolution_minutes:Number(form["resolution_"+priority])
+  }));
+  const button=$("saveSlaPolicies");button.disabled=true;
+  try{
+    const r=await fetch("/api/sla/policies",{method:"PUT",credentials:"same-origin",headers:{"Content-Type":"application/json"},body:JSON.stringify({policies})});
+    const data=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(data.error||"Não foi possível salvar políticas.");
+    toast("Políticas de SLA atualizadas.");await loadSlaPolicies();await loadSlaDashboard();
+  }catch(e){toast(e.message);}
+  finally{button.disabled=false;}
+});
+$("slaHolidayForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const values=Object.fromEntries(new FormData(e.currentTarget));
+  try{
+    const r=await fetch("/api/sla/holidays",{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json"},body:JSON.stringify(values)});
+    const data=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(data.error||"Não foi possível cadastrar feriado.");
+    e.currentTarget.reset();toast("Feriado cadastrado.");await loadSlaHolidays();await loadSlaDashboard();
+  }catch(e){toast(e.message);}
+});
+async function deleteSlaHoliday(date){
+  if(!confirm("Remover este feriado da agenda de SLA?"))return;
+  try{
+    const r=await fetch("/api/sla/holidays/"+encodeURIComponent(date),{method:"DELETE",credentials:"same-origin"});
+    if(!r.ok){const data=await r.json().catch(()=>({}));throw new Error(data.error||"Não foi possível remover.");}
+    toast("Feriado removido.");await loadSlaHolidays();await loadSlaDashboard();
+  }catch(e){toast(e.message);}
+}
 async function cepLookup(){let cep=$("cep").value.replace(/\D/g,"");if(cep.length!==8)return toast("Digite um CEP válido.");let r=await fetch("/api/cep/"+cep);let d=await r.json();$("address").textContent=r.ok?`${d.logradouro||""}, ${d.bairro||""} — ${d.localidade||""}/${d.uf||""}`:d.error}
 
 let refreshTimer=null, healthTimer=null;
+let activePage="dashboard";
 function showDashboard(role="user"){
   currentRole=role;
   $("usersButton").hidden=role!=="admin";
   $("sidebarUsersButton").hidden=role!=="admin";
   $("adminUsersPanel").hidden=true;
+  $("slaAdminSettings").hidden=role!=="admin";
   $("loginScreen").hidden=true;
   document.body.classList.remove("locked");
   $("logoutButton").hidden=false;
   health();load();
   if(refreshTimer)clearInterval(refreshTimer);
   if(healthTimer)clearInterval(healthTimer);
-  refreshTimer=setInterval(load,15000);
+  refreshTimer=setInterval(()=>{load();if(activePage==="sla")loadSlaDashboard();},15000);
   healthTimer=setInterval(health,30000);
 }
 let currentRole="user";
@@ -425,6 +788,8 @@ function showLogin(){
   $("usersButton").hidden=true;
   $("sidebarUsersButton").hidden=true;
   $("adminUsersPanel").hidden=true;
+  $("slaAdminSettings").hidden=true;
+  activePage="dashboard";
   $("loginScreen").hidden=false;
   document.body.classList.add("locked");
   $("logoutButton").hidden=true;
@@ -463,17 +828,78 @@ $("loginForm").addEventListener("submit",async e=>{
 });
 
 async function refreshUsers(){
-  const r=await fetch("/api/admin/users",{credentials:"same-origin"});
-  const data=await r.json().catch(()=>[]);
-  if(!r.ok)throw new Error(data.error||"Não foi possível carregar usuários.");
-  $("userList").innerHTML=data.length?data.map(u=>`<li><b>${esc(u.username)}</b> <span class="muted">· cadastrado em ${new Date(u.created_at).toLocaleDateString("pt-BR")}</span></li>`).join(""):"<li>Nenhum usuário adicional cadastrado.</li>";
+  const list=$("userList");
+  list.innerHTML="<li class=\"muted\">Carregando usuários...</li>";
+  try{
+    const r=await fetch("/api/admin/users",{credentials:"same-origin",headers:{"Accept":"application/json"}});
+    const payload=await r.json().catch(()=>({}));
+    if(!r.ok){
+      const message=payload.error||payload.message||(r.status===401||r.status===403?"Acesso não autorizado. Entre novamente como administrador.":"Não foi possível carregar usuários.");
+      throw new Error(message);
+    }
+    const data=Array.isArray(payload)?payload:
+      (Array.isArray(payload.users)?payload.users:
+      (Array.isArray(payload.data)?payload.data:
+      (Array.isArray(payload.rows)?payload.rows:[])));
+    list.innerHTML=data.length?data.map(u=>{
+      const created=u.created_at||u.createdAt||u.created_on;
+      const date=created?new Date(created).toLocaleDateString("pt-BR"):"";
+      const username=String(u.username||u.name||"Usuário");
+      const email=String(u.email||"");
+      return `<li style="display:block;padding:10px 0"><b>${esc(username)}</b> ${date?`<span class="muted">· cadastrado em ${date}</span>`:""}<form class="user-email-form" data-username="${esc(username)}" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:7px"><input name="email" type="email" required maxlength="254" value="${esc(email)}" placeholder="E-mail para recuperação" style="flex:1;min-width:190px"><button class="btn gray" type="submit">Salvar e-mail</button></form></li>`;
+    }).join(""):"<li>Nenhum usuário adicional cadastrado.</li>";
+    return data;
+  }catch(error){
+    list.innerHTML=`<li class=\"login-error\">${esc(error.message||"Erro ao carregar usuários.")}</li>`;
+    throw error;
+  }
 }
-$("usersButton").addEventListener("click",async()=>{
-  $("adminUsersPanel").hidden=false;
-  try{await refreshUsers();}catch(err){toast(err.message);}
-  $("adminUsersPanel").scrollIntoView({behavior:"smooth",block:"start"});
+const resetToken = new URLSearchParams(location.search).get("reset");
+const loginDefaultTitle = "Bem-vindo de volta";
+const loginDefaultSubtitle = "Entre com suas credenciais para acessar o painel.";
+
+function showRecoveryForm(){
+  $("loginForm").hidden = true;
+  $("forgotPasswordForm").hidden = false;
+  $("resetPasswordForm").hidden = true;
+  $("loginTitle").textContent = "Recuperar acesso";
+  $("loginSubtitle").textContent = "Informe o e-mail cadastrado pelo administrador para receber o link.";
+  $("recoveryMessage").textContent = "";
+  $("recoveryEmail").focus();
+}
+
+function showLoginForm(){
+  $("forgotPasswordForm").hidden = true;
+  $("resetPasswordForm").hidden = true;
+  $("loginForm").hidden = false;
+  $("loginTitle").textContent = loginDefaultTitle;
+  $("loginSubtitle").textContent = loginDefaultSubtitle;
+  $("loginError").textContent = "";
+}
+
+if (resetToken) {
+  $("loginForm").hidden = true;
+  $("forgotPasswordForm").hidden = true;
+  $("forgotPasswordButton").hidden = true;
+  $("resetPasswordForm").hidden = false;
+  $("loginTitle").textContent = "Redefinir senha";
+  $("loginSubtitle").textContent = "Crie uma nova senha para acessar sua conta.";
+}
+$("forgotPasswordButton").addEventListener("click",showRecoveryForm);
+$("backToLoginButton").addEventListener("click",showLoginForm);
+$("forgotPasswordForm").addEventListener("submit",async e=>{
+  e.preventDefault(); const message=$("recoveryMessage"); message.textContent="Enviando...";
+  try { const r=await fetch("/api/password/forgot",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:$("recoveryEmail").value.trim()})}); const d=await r.json().catch(()=>({})); if(!r.ok)throw new Error(d.error||"Não foi possível enviar."); message.textContent=d.message; }
+  catch(err){message.textContent=err.message;}
 });
-$("closeUsersButton").addEventListener("click",()=>$("adminUsersPanel").hidden=true);
+$("resetPasswordForm").addEventListener("submit",async e=>{
+  e.preventDefault(); const message=$("resetMessage"); message.textContent="Salvando...";
+  try { const r=await fetch("/api/password/reset",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({token:resetToken,password:$("newPassword").value})}); const d=await r.json().catch(()=>({})); if(!r.ok)throw new Error(d.error||"Não foi possível redefinir."); message.textContent=d.message; $("resetPasswordForm").hidden=true; $("loginForm").hidden=false; $("forgotPasswordButton").hidden=false; $("loginTitle").textContent=loginDefaultTitle; $("loginSubtitle").textContent=loginDefaultSubtitle; history.replaceState({},"",location.pathname); }
+  catch(err){message.textContent=err.message;}
+});
+
+$("usersButton").addEventListener("click",()=>navigateToPage("users"));
+$("closeUsersButton").addEventListener("click",()=>navigateToPage("dashboard"));
 $("createUserForm").addEventListener("submit",async e=>{
   e.preventDefault();
   const form=e.currentTarget, button=$("createUserButton");
@@ -488,6 +914,15 @@ $("createUserForm").addEventListener("submit",async e=>{
   finally{button.disabled=false;button.textContent="Cadastrar usuário";}
 });
 
+$("userList").addEventListener("submit",async e=>{
+  const form=e.target.closest(".user-email-form"); if(!form)return; e.preventDefault();
+  const username=form.dataset.username, email=form.elements.email.value.trim();
+  const button=form.querySelector("button"); button.disabled=true; button.textContent="Salvando...";
+  try { const r=await fetch(`/api/admin/users/${encodeURIComponent(username)}/email`,{method:"PATCH",credentials:"same-origin",headers:{"Content-Type":"application/json"},body:JSON.stringify({email})}); const d=await r.json().catch(()=>({})); if(!r.ok)throw new Error(d.error||"Falha ao salvar."); toast("E-mail de recuperação atualizado."); }
+  catch(err){toast(err.message||"Erro ao salvar e-mail.");}
+  finally{button.disabled=false;button.textContent="Salvar e-mail";}
+});
+
 $("logoutButton").addEventListener("click",async()=>{
   try{await fetch("/api/logout",{method:"POST",credentials:"same-origin"});}catch{}
   if(refreshTimer)clearInterval(refreshTimer);
@@ -497,21 +932,48 @@ $("logoutButton").addEventListener("click",async()=>{
   showLogin();
 });
 
-// Navegação lateral: mantém as seções e funções existentes do sistema.
-document.querySelectorAll("[data-nav]").forEach(link => {
-  link.addEventListener("click", event => {
-    const targetId = link.getAttribute("href").slice(1);
-    if (targetId === "knowledge") {
-      event.preventDefault();
-      toast("A área de Conhecimento será adicionada em uma próxima etapa.");
-      return;
-    }
-    const target = document.getElementById(targetId);
-    if (target) {
-      event.preventDefault();
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
-      document.querySelectorAll("[data-nav]").forEach(item => item.classList.toggle("active", item === link));
-    }
+// Navegação por páginas independentes: troca o conteúdo sem recarregar a aplicação.
+const pageInfo = {
+  dashboard: ["Dashboard", "Visão geral da operação e indicadores de atendimento."],
+  tickets: ["Chamados", "Consulte, acompanhe e gerencie todos os chamados."],
+  queue: ["Fila de chamados", "Acompanhe os chamados que aguardam atendimento."],
+  sla: ["Acordo de nível de serviço (SLA)", "Monitore prazos, pausas, feriados e cumprimento dos chamados."],
+  new: ["Novo chamado", "Registre uma nova solicitação de suporte."],
+  users: ["Usuários", "Cadastre e gerencie os acessos ao sistema."],
+  knowledge: ["Conhecimento", "Artigos, tutoriais e soluções de TI."]
+};
+async function navigateToPage(page) {
+  if (!pageInfo[page]) page = "dashboard";
+  activePage=page;
+  if (page === "users" && currentRole !== "admin") {
+    toast("Somente o administrador pode acessar usuários.");
+    page = "dashboard";
+  }
+  document.querySelectorAll(".app-page").forEach(section => {
+    section.hidden = section.id !== "page-" + page;
+  });
+  // showDashboard() oculta o painel administrativo por segurança; ao entrar
+  // na página Usuários como admin, é obrigatório torná-lo visível novamente.
+  $("adminUsersPanel").hidden = page !== "users";
+  document.querySelectorAll("[data-nav]").forEach(item => {
+    item.classList.toggle("active", item.dataset.nav === page);
+  });
+  $("pageTitle").textContent = pageInfo[page][0];
+  $("pageSubtitle").textContent = pageInfo[page][1];
+  history.replaceState(null, "", "#" + page);
+  window.scrollTo({top: 0, behavior: "smooth"});
+  if (page === "users") {
+    try { await refreshUsers(); } catch (err) { toast(err.message); }
+  }
+  if (page === "sla") {
+    await loadSlaDashboard();
+    await loadSlaAdmin();
+  }
+}
+document.querySelectorAll("[data-nav]").forEach(item => {
+  item.addEventListener("click", event => {
+    event.preventDefault();
+    navigateToPage(item.dataset.nav);
   });
 });
 $("sidebarUsersButton").addEventListener("click", () => $("usersButton").click());
