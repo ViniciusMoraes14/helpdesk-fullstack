@@ -10,8 +10,14 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+<<<<<<< HEAD
     "pg": "^8.13.1",
     "express-session": "^1.18.1",
     "express-rate-limit": "^7.5.0"
   }
 }
+=======
+    "pg": "^8.13.1"
+  }
+}
+>>>>>>> c860af904b9ab5e92a669592df2f1bc32967cb7a

@@ -4,8 +4,11 @@ const cors = require("cors");
 const { Pool } = require("pg");
 const path = require("path");
 const crypto = require("crypto");
+<<<<<<< HEAD
 const session = require("express-session");
 const rateLimit = require("express-rate-limit");
+=======
+>>>>>>> c860af904b9ab5e92a669592df2f1bc32967cb7a
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,6 +19,7 @@ const pool = new Pool({
 });
 
 app.use(cors());
+<<<<<<< HEAD
 app.use(express.json({ limit: "100kb" }));
 
 if (!process.env.HELPDESK_USER || !process.env.HELPDESK_PASSWORD || !process.env.SESSION_SECRET) {
@@ -226,12 +230,16 @@ app.post("/api/logout", requireAuth, (req, res, next) => {
     res.json({ ok: true });
   });
 });
+=======
+app.use(express.json());
+>>>>>>> c860af904b9ab5e92a669592df2f1bc32967cb7a
 app.use(express.static(path.join(__dirname, "public")));
 
 const id = () => "HD-" + crypto.randomBytes(3).toString("hex").toUpperCase();
 
 async function init() {
   await pool.query(`
+<<<<<<< HEAD
     CREATE TABLE IF NOT EXISTS helpdesk_users (
       id BIGSERIAL PRIMARY KEY,
       username VARCHAR(40) NOT NULL UNIQUE,
@@ -245,6 +253,8 @@ async function init() {
   await pool.query("ALTER TABLE helpdesk_users ADD COLUMN IF NOT EXISTS reset_expires_at TIMESTAMPTZ");
   await pool.query("CREATE UNIQUE INDEX IF NOT EXISTS helpdesk_users_email_unique ON helpdesk_users (LOWER(email)) WHERE email IS NOT NULL");
   await pool.query(`
+=======
+>>>>>>> c860af904b9ab5e92a669592df2f1bc32967cb7a
     CREATE TABLE IF NOT EXISTS tickets (
       id VARCHAR(20) PRIMARY KEY,
       requester VARCHAR(120) NOT NULL,
@@ -259,6 +269,7 @@ async function init() {
       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `);
+<<<<<<< HEAD
 
   // Migração aditiva: não remove nem recria os chamados já existentes.
   await pool.query(`
@@ -350,10 +361,13 @@ async function init() {
         WHERE p.ticket_id=t.id AND p.pause_type='resolved' AND p.ended_at IS NULL
       )
   `);
+=======
+>>>>>>> c860af904b9ab5e92a669592df2f1bc32967cb7a
 }
 
 const priorityOrder = { "Crítica": 0, "Alta": 1, "Média": 2, "Baixa": 3 };
 
+<<<<<<< HEAD
 const SLA_TIME_ZONE = "America/Sao_Paulo";
 const BUSINESS_OPEN_MINUTE = 9 * 60;
 const BUSINESS_CLOSE_MINUTE = 18 * 60;
@@ -475,10 +489,14 @@ function makeSlaData(ticket, pauses, holidays, now = new Date()) {
 }
 
 function enrich(t, sla = null) {
+=======
+function enrich(t) {
+>>>>>>> c860af904b9ab5e92a669592df2f1bc32967cb7a
   const waitMinutes = Math.max(0, Math.ceil((Date.now() - new Date(t.created_at).getTime()) / 60000));
   return {
     id:t.id, requester:t.requester, department:t.department, category:t.category,
     subject:t.subject, description:t.description, priority:t.priority, status:t.status,
+<<<<<<< HEAD
     assignedTo:t.assigned_to, createdAt:t.created_at, updatedAt:t.updated_at, waitMinutes,
     firstResponseAt:t.first_response_at, resolvedAt:t.resolved_at, sla
   };
@@ -506,6 +524,12 @@ async function enrichTicketsWithSla(rows) {
   return rows.map(t => enrich(t, makeSlaData(t, pausesByTicket.get(t.id) || [], holidays)));
 }
 
+=======
+    assignedTo:t.assigned_to, createdAt:t.created_at, updatedAt:t.updated_at, waitMinutes
+  };
+}
+
+>>>>>>> c860af904b9ab5e92a669592df2f1bc32967cb7a
 app.get("/api/health", async (_, res) => {
   try {
     await pool.query("SELECT 1");
@@ -513,12 +537,15 @@ app.get("/api/health", async (_, res) => {
   } catch (e) { res.status(503).json({ online:false, error:"Banco indisponível" }); }
 });
 
+<<<<<<< HEAD
 // Todas as rotas de dados abaixo exigem uma sessão autenticada.
 app.use("/api", (req, res, next) => {
   if (req.path === "/health" || req.path === "/login" || req.path === "/session" || req.path === "/logout") return next();
   return requireAuth(req, res, next);
 });
 
+=======
+>>>>>>> c860af904b9ab5e92a669592df2f1bc32967cb7a
 app.get("/api/cep/:cep", async (req,res) => {
   const cep = String(req.params.cep).replace(/\D/g,"");
   if (cep.length !== 8) return res.status(400).json({error:"CEP inválido"});
@@ -533,11 +560,16 @@ app.get("/api/cep/:cep", async (req,res) => {
 app.get("/api/tickets", async (_,res) => {
   try {
     const {rows} = await pool.query("SELECT * FROM tickets ORDER BY created_at DESC");
+<<<<<<< HEAD
     const tickets = await enrichTicketsWithSla(rows);
+=======
+    const tickets = rows.map(enrich);
+>>>>>>> c860af904b9ab5e92a669592df2f1bc32967cb7a
     const queue = tickets.filter(t=>["Aberto","Em espera"].includes(t.status))
       .sort((a,b)=>(priorityOrder[a.priority]-priorityOrder[b.priority]) ||
                     (new Date(a.createdAt)-new Date(b.createdAt)));
     res.json({tickets,queue});
+<<<<<<< HEAD
   } catch(e) { console.error("Erro ao carregar chamados:", e.message); res.status(500).json({error:"Erro ao carregar chamados"}); }
 });
 
@@ -618,6 +650,23 @@ app.post("/api/tickets", async (req,res) => {
   } finally {
     client.release();
   }
+=======
+  } catch(e) { res.status(500).json({error:"Erro ao carregar chamados"}); }
+});
+
+app.post("/api/tickets", async (req,res) => {
+  const {requester,department,category,subject,description,priority} = req.body;
+  if (!requester || !subject || !description) return res.status(400).json({error:"Solicitante, assunto e descrição são obrigatórios."});
+  const ticket = {id:id(), requester, department:department||"Não informado", category:category||"Outros",
+    subject,description,priority:priority||"Média"};
+  try {
+    const {rows} = await pool.query(`
+      INSERT INTO tickets(id,requester,department,category,subject,description,priority)
+      VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
+      [ticket.id,ticket.requester,ticket.department,ticket.category,ticket.subject,ticket.description,ticket.priority]);
+    res.status(201).json(enrich(rows[0]));
+  } catch(e) { res.status(500).json({error:"Erro ao criar chamado"}); }
+>>>>>>> c860af904b9ab5e92a669592df2f1bc32967cb7a
 });
 
 app.patch("/api/tickets/:id", async (req,res) => {
@@ -628,6 +677,7 @@ app.patch("/api/tickets/:id", async (req,res) => {
     if (req.body[key] !== undefined) { values.push(req.body[key]); changes.push(`${key}=$${values.length}`); }
   }
   if (!changes.length) return res.status(400).json({error:"Nenhuma alteração enviada"});
+<<<<<<< HEAD
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
@@ -677,6 +727,14 @@ app.patch("/api/tickets/:id", async (req,res) => {
     console.error("Erro ao atualizar chamado:", e.message);
     res.status(500).json({error:"Erro ao atualizar chamado"});
   } finally { client.release(); }
+=======
+  values.push(new Date(), req.params.id);
+  try {
+    const {rows} = await pool.query(`UPDATE tickets SET ${changes.join(", ")}, updated_at=$${values.length-1} WHERE id=$${values.length} RETURNING *`, values);
+    if (!rows[0]) return res.status(404).json({error:"Chamado não encontrado"});
+    res.json(enrich(rows[0]));
+  } catch(e) { res.status(500).json({error:"Erro ao atualizar chamado"}); }
+>>>>>>> c860af904b9ab5e92a669592df2f1bc32967cb7a
 });
 
 app.delete("/api/tickets/:id", async (req,res) => {
@@ -687,6 +745,7 @@ app.delete("/api/tickets/:id", async (req,res) => {
   } catch(e) { res.status(500).json({error:"Erro ao excluir chamado"}); }
 });
 
+<<<<<<< HEAD
 
 // Painel e configuração do SLA. Todas as rotas exigem sessão; edição é exclusiva do admin.
 app.get("/api/sla/dashboard", async (_req,res) => {
@@ -774,6 +833,8 @@ app.get("/api/tickets/:id/sla-history", async (req,res) => {
   } catch(e) { res.status(500).json({error:"Não foi possível carregar o histórico de SLA."}); }
 });
 
+=======
+>>>>>>> c860af904b9ab5e92a669592df2f1bc32967cb7a
 app.get("*", (_,res)=>res.sendFile(path.join(__dirname,"public","index.html")));
 
 init().then(()=>app.listen(PORT,()=>console.log(`Help Desk online na porta ${PORT}`)))
